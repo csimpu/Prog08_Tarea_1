@@ -80,7 +80,8 @@ public class Principal {
         System.out.println("[4] - Realizar un ingreso");
         System.out.println("[5] - Realizar una retirada");
         System.out.println("[6] - Consultar el saldo");
-        System.out.println("[7] - Salir               [0] - Ayuda");
+        System.out.println("[7] - Eliminar una cuenta");
+        System.out.println("[8] - Salir               [0] - Ayuda");
         System.out.println("*************************************");
         System.out.print("Introduce una opcion: ");
     }
@@ -456,6 +457,8 @@ public class Principal {
         System.out.println("      de saldo en la cuenta elegida");
         System.out.println("[6] - Permite consultar el saldo de ");
         System.out.println("      la cuenta seleccionada");
+        System.out.println("[7] - Permite eliminar una cuenta ");
+        System.out.println("      del banco");
         System.out.println("*************************************");
         Utilidades.enterParaSalir();
     }
