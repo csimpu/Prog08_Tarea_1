@@ -53,7 +53,7 @@ public class Banco {
      * @return devuelve la lista con el formato especificado
      */
     public String[] listadoCuentas() {
-        String[] listado = new String[contador];
+        String[] listado = new String[cuentas.size()];
         for (int i = 0; i < cuentas.size(); i++) { // Utilizo size() para saber el tamaño del ArrayList
             listado[i] = cuentas.get(i).getIban() // Utilizo get() para obtener la posicion en el ArrayList
                     + "\n" + cuentas.get(i).getTitular().getNombre() + " " + cuentas.get(i).getTitular().getApellidos()
