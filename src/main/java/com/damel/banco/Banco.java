@@ -5,6 +5,8 @@
 package com.damel.banco;
 
 import com.damel.objetos.CuentaBancaria;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Clase Banco<br>
@@ -19,8 +21,8 @@ import com.damel.objetos.CuentaBancaria;
  */
 public class Banco {
 
-    // Defino el array y el contador de cuentas bancarias
-    private CuentaBancaria[] cuentas;
+    // Defino el arraylist
+    private ArrayList<CuentaBancaria> cuentas;
     private int contador;
 
     /**
@@ -29,27 +31,20 @@ public class Banco {
      * Inicializa el array y el contador.
      */
     public Banco() {
-        cuentas = new CuentaBancaria[100];
+        cuentas = new ArrayList<>(); // Inicializo el ArrayList
         contador = 0;
     }
 
     /**
      * Abre una nueva cuenta bancaria.<br>
      *
-     * Comprueba que hay espacio disponible en el array, y añade la nueva cuenta
-     * en la posición indicada por el contador
+     * Añade la nueva cuenta al ArrayList
      *
      * @param cuenta la cuenta bancaria
-     * @return devuelve {@code true} si la cuenta se añade.<br>> devuelve (@code
-     * false) si no hay espacio en el array
+     * @return devuelve {@code true} si la cuenta se añade.
      */
     public boolean abrirCuenta(CuentaBancaria cuenta) {
-        if (contador < cuentas.length) {
-            cuentas[contador] = cuenta;
-            contador++;
-            return true;
-        }
-        return false;
+        return cuentas.add(cuenta); // Añado la cuenta al ArrayList
     }
 
     /**
@@ -59,10 +54,10 @@ public class Banco {
      */
     public String[] listadoCuentas() {
         String[] listado = new String[contador];
-        for (int i = 0; i < contador; i++) {
-            listado[i] = cuentas[i].getIban()
-                    + "\n" + cuentas[i].getTitular().getNombre() + " " + cuentas[i].getTitular().getApellidos()
-                    + "\n" + cuentas[i].getSaldo() + " Eur";
+        for (int i = 0; i < cuentas.size(); i++) { // Utilizo size() para saber el tamaño del ArrayList
+            listado[i] = cuentas.get(i).getIban() // Utilizo get() para obtener la posicion en el ArrayList
+                    + "\n" + cuentas.get(i).getTitular().getNombre() + " " + cuentas.get(i).getTitular().getApellidos()
+                    + "\n" + cuentas.get(i).getSaldo() + " Eur";
         }
         return listado;
     }
@@ -78,9 +73,10 @@ public class Banco {
      * devuelve {@code null} si no hay coincidencia.
      */
     public String informacionCuenta(String iban) {
-        for (int i = 0; i < contador; i++) {
-            if (cuentas[i].getIban().equals(iban)) {
-                return cuentas[i].devolverInfoString();
+        // Para cada elemento cuenta del ArrayList cuentas
+        for (CuentaBancaria cuenta : cuentas) {
+            if (cuenta.getIban().equals(iban)) {
+                return cuenta.devolverInfoString();
             }
         }
         return null;
@@ -96,9 +92,9 @@ public class Banco {
      * devuelve {@code false} si no encuentra el IBAN.
      */
     public boolean ingresoCuenta(String iban, double cantidad) {
-        for (int i = 0; i < contador; i++) {
-            if (cuentas[i].getIban().equals(iban)) {
-                cuentas[i].ingresar(cantidad);
+        for (CuentaBancaria cuenta : cuentas) {
+            if (cuenta.getIban().equals(iban)) {
+                cuenta.ingresar(cantidad);
                 return true;
             }
         }
@@ -111,14 +107,14 @@ public class Banco {
      *
      * @param iban El IBAN de la cuenta donde se hará la retirada.
      * @param cantidad La cantidad que se retirará
-     * @return devuelve {@code true} si se cumple la condición de 
+     * @return devuelve {@code true} si se cumple la condición de
      * {@link CuentaBancaria#retirar(double)}.<br>
      * devuelve {@code false} si no encuentra el IBAN.
      */
     public boolean retiradaCuenta(String iban, double cantidad) {
-        for (int i = 0; i < contador; i++) {
-            if (cuentas[i].getIban().equals(iban)) {
-                return cuentas[i].retirar(cantidad);
+        for (CuentaBancaria cuenta : cuentas) {
+            if (cuenta.getIban().equals(iban)) {
+                return cuenta.retirar(cantidad);
             }
         }
         return false;
@@ -127,17 +123,42 @@ public class Banco {
     /**
      * Obtiene el saldo de una cuenta específica.<br>
      * Busca una cuenta por su IBAN y muestra el saldo que tiene esa cuenta.
+     *
      * @param iban El IBAN de la cuenta
      * @return devuelve el saldo de la cuenta si encuentra el IBAN.<br>
      * devuelve {@code -1} si no encuentra el IBAN.
      */
     public double obtenerSaldo(String iban) {
-        for (int i = 0; i < contador; i++) {
-            if (cuentas[i].getIban().equals(iban)) {
-                return cuentas[i].getSaldo();
+        for (CuentaBancaria cuenta : cuentas) {
+            if (cuenta.getIban().equals(iban)) {
+                return cuenta.getSaldo();
             }
         }
         return -1;
     }
 
+    /**
+     * Elimina una cuenta bancaria si existe y no tiene saldo
+     *
+     * @param iban El iban de la cuenta a eliminar
+     * @return 0 si la cuenta se elimina correctamente.<br>
+     * -1 si la cuenta no existe.<br>
+     * -2 si la cuente tiene saldo.
+     */
+    public int eliminarCuenta(String iban) {
+        // Uso un iterador para elimiar de forma segura
+        Iterator<CuentaBancaria> iterador = cuentas.iterator();
+        while (iterador.hasNext()) {
+            CuentaBancaria cuenta = iterador.next();
+            if (cuenta.getIban().equals(iban)) {
+                if (cuenta.getSaldo() == 0) {
+                    iterador.remove(); //Elimino la cuenta usando el iterador
+                    return 0;
+                } else {
+                    return -2;
+                }
+            }
+        }
+        return -1;
+    }
 }
