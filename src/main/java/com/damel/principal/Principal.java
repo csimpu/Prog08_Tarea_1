@@ -413,6 +413,9 @@ public class Principal {
         Utilidades.enterParaSalir();
     }
 
+    /**
+     * Muestra el menú Eliminar cuenta e implementa el metodo eliminarCuenta
+     */
     private static void borrarCuenta() {
         System.out.println("*************************************");
         System.out.println("*          Eliminar cuenta          *");
