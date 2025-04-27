@@ -22,10 +22,10 @@ public class Principal {
 
     /**
      * Metodo main de la clase.<br>
-     * 
+     *
      * Inicia el programa, muestra el menú principal y procesa las opciones
      * seleccionadas
-     * 
+     *
      * @param args No utilizado.
      */
     public static void main(String[] args) {
@@ -50,6 +50,8 @@ public class Principal {
                     case 6 ->
                         consultarSaldo();
                     case 7 ->
+                        borrarCuenta();
+                    case 8 ->
                         System.out.println("Gracias por usar el servicio. Cerrando...");
                     case 0 ->
                         mostrarAyuda();
@@ -60,7 +62,7 @@ public class Principal {
                 System.err.println("Error: Debes introducir un numero valido.");
                 opcion = 0;
             }
-        } while (opcion != 7);
+        } while (opcion != 8);
 
         entrada.close();
     }
@@ -98,8 +100,8 @@ public class Principal {
     }
 
     /**
-     * Muestra el menú Nueva cuenta y crea la nueva cuenta dentro del tipo
-     * que le corresponde.
+     * Muestra el menú Nueva cuenta y crea la nueva cuenta dentro del tipo que
+     * le corresponde.
      */
     private static void nuevaCuenta() {
         System.out.println("*************************************");
@@ -299,7 +301,7 @@ public class Principal {
     }
 
     /**
-     * Muestra el menú Información de la cuenta e implementa el método 
+     * Muestra el menú Información de la cuenta e implementa el método
      * informacionCuenta
      */
     private static void informacionCuenta() {
@@ -315,7 +317,7 @@ public class Principal {
         } else {
             System.out.println(datos);
         }
-        
+
         System.out.println("*************************************");
 
         Utilidades.enterParaSalir();
@@ -348,7 +350,7 @@ public class Principal {
         } else {
             System.out.println("Ingreso no realizado");
         }
-        
+
         System.out.println("*************************************");
 
         Utilidades.enterParaSalir();
@@ -384,7 +386,7 @@ public class Principal {
         } else {
             System.out.println("No se ha realizado la retirada");
         }
-        
+
         System.out.println("*************************************");
 
         Utilidades.enterParaSalir();
@@ -405,7 +407,30 @@ public class Principal {
         } else {
             System.out.println("Tiene un saldo de " + saldo + " Eur");
         }
-        
+
+        System.out.println("*************************************");
+
+        Utilidades.enterParaSalir();
+    }
+
+    private static void borrarCuenta() {
+        System.out.println("*************************************");
+        System.out.println("*          Eliminar cuenta          *");
+        System.out.println("*************************************");
+        System.out.println("Introduce el IBAN de la cuenta:");
+        String iban = entrada.nextLine();
+
+        int resultadoEliminar = banco.eliminarCuenta(iban);
+
+        switch (resultadoEliminar) {
+            case 0 ->
+                System.out.println("Cuenta eliminada correctamente");
+            case -1 ->
+                System.out.println("Error: No se ha encontrado la cuenta");
+            case -2 ->
+                System.out.println("Error: La cuenta tiene saldo");
+        }
+
         System.out.println("*************************************");
 
         Utilidades.enterParaSalir();
